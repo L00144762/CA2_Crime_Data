@@ -56,7 +56,14 @@ str(AllNICrimeData$Crime.type)
 AllNICrimeData$Location <- gsub("On or near", "", AllNICrimeData$Location)
 AllNICrimeData$Location[AllNICrimeData$Location == " "] <- NA
 
+#removing all NA values from crime data
+AllNICrimeData <- na.omit(AllNICrimeData)
+colSums(is.na(AllNICrimeData))
 
+#random sample of 1000
+random_crime_sample <- AllNICrimeData[sample(1:nrow(AllNICrimeData)
+                                                    , 1000, replace= FALSE),]
 
+NI_postcode <- read.csv("C:/Users/Richard/Documents/CA2/CleanNIPostcodeData.csv", stringsAsFactors = FALSE)
 
-
+sum(is.na(NI_postcode$Postcode))
