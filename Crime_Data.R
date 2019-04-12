@@ -35,14 +35,8 @@ write.csv(AllNICrimeData, "AllNICrimeData.csv")
 #number of rows in dataset
 nrow(AllNICrimeData)
 
-#tidying dataset; seeing empty cols and getting rid of empty colus
 
-x<- colSums(is.na(AllNICrimeData)) #total na per col
-
-y <- nrow(AllNICrimeData) #total row per col
-
-y-x  # result: any that equal zero are columns containing nothing bu NA and so can be deleted
-     #crime id is a string of 
+#filtering unwanted columns
 
 AllNICrimeData <- subset(AllNICrimeData, select = -c(Crime.ID, LSOA.code, LSOA.name,
                                                              Last.outcome.category, Context)) 
@@ -63,12 +57,14 @@ colSums(is.na(AllNICrimeData))
 #random sample of 1000
 random_crime_sample <- AllNICrimeData[sample(1:nrow(AllNICrimeData), 1000, replace= FALSE),]
 
+#Primary.thorfare is in uppercase; msetting Location to uppercase in random_sample 
+head(NI_Thor_PCode$Location, 3)
 random_crime_sample$Location <- toupper(random_crime_sample$Location)
 
 head(random_crime_sample$Location, 3)
 head(NI_Thor_PCode$Location, 3)
 
-#trimmign leading and trailing whitespace
+#there is leading whitespace in random_sample(Location). This trims leading and trailing whitespace from key columns
 random_crime_sample$Location <- gsub('^\\s+|\\s+$',"", random_crime_sample$Location)
 NI_Thor_PCode$Primary.Thorfare <- gsub('^\\s+|\\s+$',"", NI_Thor_PCode$Primary.Thorfare)
 
@@ -85,7 +81,7 @@ NI_Thor_PCode <- tbl_df(NI_Thor_PCode)
 
 
 #find a postcode function; filters the rows of NI_Thor_Pcode data for which Primary.Thorfare is a match for Location
-#finds the most occurences of each postcode for each of the locations in random_crim_sample 
+#finds the most occurences of each postcode for each of the matched locations in random_crim_sample 
 find_a_postcode <- lapply(random_crime_sample$Location, function(Location) {
   
   matched_location <- filter(NI_Thor_PCode, Primary.Thorfare == Location)
@@ -96,15 +92,14 @@ find_a_postcode <- lapply(random_crime_sample$Location, function(Location) {
   return(pcodes)
 })
 
-# converting pcodes to character vector so it can be added to rand_crime_sample dataframe
+# converting pcodes to character vector so it can be properly added to rand_crime_sample dataframe
 pcodes <- as.character(find_a_postcode)
 random_crime_sample$Postcodes <- pcodes
 str(random_crime_sample)
 
-#test_data <- rowr::cbind.fill(random_crime_sample, NI_Thor_PCode, fill = NA)
+write.csv(random_crime_sample, file = "random_crime_sample.csv", row.names = FALSE)
 
 
 
-#want rows in random to have postcode; using postcode dataset give each value in location(random) a postcode based on location(postcode)
 
 
