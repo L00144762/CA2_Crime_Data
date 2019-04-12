@@ -73,11 +73,12 @@ NI_postcode <- read.csv("C:/Users/Richard/Documents/CA2/CleanNIPostcodeData.csv"
 NI_postcode <-unique(NI_postcode)
 
 #primary thorfare is assumed to be the main road for each postcode
-#therefore these two attributes will be filtered into a new df tbl
+#therefore these two attributes will be filtered into a new df tbl 
+#can do more with data table data frame
 
 NI_Thor_PCode <- subset(NI_postcode, select = c(Primary.Thorfare, Postcode))
 NI_Thor_PCode <- na.omit(NI_Thor_PCode) #removing any na values from primary thorfare
-NI_Thor_PCode <- tbl_df(NI_Thor_PCode)
+NI_Thor_PCode <- tibble::as.tibble(NI_Thor_PCode)
 
 
 #find a postcode function; filters the rows of NI_Thor_Pcode data for which Primary.Thorfare is a match for Location
@@ -99,7 +100,16 @@ str(random_crime_sample)
 
 write.csv(random_crime_sample, file = "random_crime_sample.csv", row.names = FALSE)
 
+#creating updated_random_sample as a subset of random_crime_sample but with select colums
+updated_random_sample <- subset(random_crime_sample, select = c(Month, Longitude,Latitude, Location,
+                                                                Crime.type, Postcodes))
 
+#covnerting to data table dta frame and reordering                                  
+chart_data <- tibble::as.tibble(updated_random_sample)
+chart_data <- chart_data[order(chart_data$Postcodes, chart_data$Crime.type),]
 
-
-
+#summary stats for crime type
+#occurence of each crime type in ech postcode
+tapply(chart_data$Crime.type, chart_data$Postcodes,  summary)
+#total occurence of each crime
+table(chart_data$Crime.type)
