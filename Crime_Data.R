@@ -109,7 +109,7 @@ chart_data <- tibble::as.tibble(updated_random_sample)
 chart_data <- chart_data[order(chart_data$Postcodes, chart_data$Crime.type),]
 
 #summary stats for crime type
-#occurence of each crime type in ech postcode
+#occurence of each crime type in ech postcode.
 tapply(chart_data$Crime.type, chart_data$Postcodes,  summary)
 #total occurence of each crime
 table(chart_data$Crime.type)
