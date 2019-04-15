@@ -57,7 +57,7 @@ colSums(is.na(AllNICrimeData))
 #random sample of 1000
 random_crime_sample <- AllNICrimeData[sample(1:nrow(AllNICrimeData), 1000, replace= FALSE),]
 
-#reading postcode csv file
+#reading postcode csv file. Copied from CA2_NI_Postcode project to CA2_Crime_Data project repository.
 NI_postcode <- read.csv("CleanNIPostcodeData.csv", stringsAsFactors = FALSE)
 
 
@@ -97,7 +97,7 @@ find_a_postcode <- function(Location) {
   return(pcodes)
   }
 
-rm(pcodes)
+
 
 pcodes <- lapply(random_crime_sample$Location, find_a_postcode)
 
