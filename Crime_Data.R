@@ -58,7 +58,8 @@ colSums(is.na(AllNICrimeData))
 random_crime_sample <- AllNICrimeData[sample(1:nrow(AllNICrimeData), 1000, replace= FALSE),]
 
 #reading postcode csv file
-NI_postcode <- read.csv("C://Users/Richard/Documents/CA2/CleanNIPostcodeData.csv", stringsAsFactors = FALSE)
+NI_postcode <- read.csv("CleanNIPostcodeData.csv", stringsAsFactors = FALSE)
+
 
 
 #primary thorfare is assumed to be the main road for each postcode
